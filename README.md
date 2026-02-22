@@ -1,64 +1,80 @@
 # Zindi Financial Health Prediction Challenge – Financial Health Index (FHI)
 
-## 📌 Overview
+## Overview
 
-This repository contains the complete pipeline used for the **data.org Financial Health Prediction Challenge** hosted on Zindi.
+This repository contains the complete training and inference pipeline used for the data.org Financial Health Prediction Challenge hosted on Zindi.
 
-The goal of the competition is to predict the **Financial Health Index (FHI)** of small and medium-sized enterprises (SMEs) across Southern Africa using socio-economic and business data.
+GitHub Repository:
+[https://github.com/aki-008/Zindi-Financial-Health-Prediction-Challenge-Submission.git](https://github.com/aki-008/Zindi-Financial-Health-Prediction-Challenge-Submission.git)
 
-Each SME must be classified into one of three categories:
+The objective is to predict the Financial Health Index (FHI) of small and medium-sized enterprises (SMEs) across Southern Africa.
 
-* **Low**
-* **Medium**
-* **High**
+Each SME is classified into one of three categories:
 
-The evaluation metric used in the challenge is **Macro F1 Score**.
+* Low
+* Medium
+* High
+
+The evaluation metric used in the challenge is Macro F1 Score.
 
 ---
 
-## 🌍 Competition Context
+## Competition Context
 
-SMEs play a critical role in employment and economic growth but often face financial instability due to:
+SMEs are critical to economic growth and employment but often face financial vulnerability due to:
 
 * Limited access to credit
 * Unstable cash flow
-* Exposure to economic and climate shocks
+* Exposure to economic shocks
 
-This challenge introduces a **data-driven Financial Health Index** based on:
+This challenge builds a data-driven Financial Health Index using:
 
-* Savings & assets
-* Debt & repayment ability
-* Resilience to shocks
+* Savings and assets indicators
+* Debt and repayment capacity
+* Business resilience factors
 * Access to financial services
-
-Participants must build machine learning models using business, demographic, and economic indicators to predict financial well-being.
 
 ---
 
-## 🗂️ Repository Structure
+## Repository Structure
 
 ```
 aki-008-zindi-financial-health-prediction-challenge-submission/
 ├── README.md
+├── environment.yml
+├── requirements.txt
 ├── scripts/
 │   ├── Train.py        # Model training pipeline
-│   └── predict.py      # Inference & submission generation
+│   └── predict.py      # Inference and submission generation
 └── Submission/
-    └── predictions.csv # Final output file
+    └── predictions.csv # Final submission output
 ```
 
 ---
 
-## ⚙️ Setup Instructions
+## Setup Instructions
 
-### 1️⃣ Clone the Repository
+### 1. Clone the Repository
 
 ```bash
-git clone <your-repo-url>
-cd <repo-name>
+git clone https://github.com/aki-008/Zindi-Financial-Health-Prediction-Challenge-Submission.git
+cd Zindi-Financial-Health-Prediction-Challenge-Submission
 ```
 
-### 2️⃣ Create Virtual Environment
+---
+
+### 2. Create Environment
+
+You can use either conda or venv.
+
+Option A — Using Conda
+
+```bash
+conda env create -f environment.yml
+conda activate zindi-fhi
+```
+
+Option B — Using Virtual Environment
 
 ```bash
 python -m venv venv
@@ -74,7 +90,7 @@ venv\Scripts\activate
 source venv/bin/activate
 ```
 
-### 3️⃣ Install Dependencies
+Install dependencies:
 
 ```bash
 pip install -r requirements.txt
@@ -82,115 +98,67 @@ pip install -r requirements.txt
 
 ---
 
-## 📥 Download Competition Data
+## Download Competition Data
 
-1. Go to the Zindi competition page
+1. Visit the Zindi competition page.
 2. Download:
 
    * Train dataset
    * Test dataset
-   * Sample submission
-3. Place them in:
+   * Sample submission file
+3. Place them in the project root (or update file paths inside scripts accordingly).
+
+Example expected location:
 
 ```
-data/raw/
-```
-
----
-
-## 🔍 Step-by-Step Usage Guide
-
-### Step 1 — Exploratory Data Analysis
-
-Run the notebook:
-
-```
-notebooks/EDA.ipynb
-```
-
-This helps understand:
-
-* Class imbalance
-* Missing values
-* Feature distributions
-
----
-
-### Step 2 — Feature Engineering
-
-Run:
-
-```
-notebooks/feature_engineering.ipynb
-```
-
-This step includes:
-
-* Categorical encoding
-* Binary mapping
-* Interaction features
-* Aggregations
-
-Output:
-
-```
-data/processed/train_processed.csv
+project_root/
+    train.csv
+    test.csv
 ```
 
 ---
 
-### Step 3 — Model Training
+## Workflow
 
-Run:
+### Train the Model
+
+Train the model using the training script:
 
 ```bash
-python src/train.py
+python scripts/Train.py
 ```
 
-Typical pipeline:
+This script:
 
-* Train/validation split
-* Oversampling (SMOTE/ADASYN optional)
-* Feature selection
-* RandomForest / XGBoost / LightGBM
-* Hyperparameter tuning
+* Loads the training data
+* Applies preprocessing and feature engineering
+* Handles class imbalance (if enabled)
+* Trains the classification model
+* Evaluates using Macro F1 Score
+* Saves model artifacts if configured
 
-Output:
+### Generate Predictions
 
-```
-models/model.pkl
-```
-
----
-
-### Step 4 — Validation
-
-Evaluate model performance:
-
-* Classification report
-* Confusion matrix
-* Macro F1 score
-
-Focus on improving recall for:
-
-* Medium
-* High
-
----
-
-### Step 5 — Generate Predictions
+Make predictions using the inference script:
 
 ```bash
-python src/predict.py
+python scripts/predict.py
 ```
+
+This script:
+
+* Loads the trained model
+* Applies identical preprocessing to the test data
+* Generates predictions
+* Creates the submission file
 
 Output file:
 
 ```
-submissions/submission.csv
+Submission/predictions.csv
 ```
 
-Format:
+Submission format:
 
 ```
 ID,Target
@@ -198,77 +166,68 @@ ID_XXXX,Low
 ID_YYYY,Medium
 ```
 
----
-
-## 🧠 Modeling Strategy
-
-Key approaches used:
-
-* Class imbalance handling
-* Feature engineering from categorical + numeric interactions
-* Ensemble models
-* Calibration
-* Error analysis using misclassified samples
+In addition, an accompanying Jupyter Notebook (.ipynb) is included in the repository that demonstrates the full workflow step by step, including preprocessing, model training, evaluation, and prediction generation.
 
 ---
 
-## 📊 Evaluation Metric
+## Modeling Approach
 
-**Macro F1 Score**
+Key techniques used:
 
-Why?
+* Structured preprocessing pipeline
+* Feature engineering from numeric and categorical variables
+* Handling class imbalance
+* Cross-validation for stability
+* Error analysis of misclassified samples
 
-* Balanced importance across all classes
-* Penalizes poor performance on minority classes
-
----
-
-## 🚀 Submission Guide
-
-1. Generate predictions
-2. Ensure format:
-
-```
-ID,Target
-```
-
-3. Upload CSV to Zindi
-
-Limits:
-
-* 10 submissions per day
-* Public leaderboard = ~30% test data
-* Private leaderboard = ~70% test data
+Primary objective: maximize Macro F1 Score while maintaining balanced class performance.
 
 ---
 
-## 🏆 Tips to Improve Score
+## Evaluation Metric
 
-* Handle class imbalance carefully
-* Engineer domain-inspired features
-* Analyze misclassified samples
-* Use cross-validation
-* Tune hyperparameters
+Macro F1 Score
 
----
+Why Macro F1?
 
-## 📚 Learning Resources
-
-Recommended topics:
-
-* Responsible AI
-* Financial inclusion datasets
-* Feature engineering for tabular ML
+* Treats all classes equally
+* Prevents bias toward majority class
+* Encourages balanced performance across Low, Medium, and High categories
 
 ---
 
-## 🧾 License
+## Submission Instructions
 
-This project follows the competition's **CC-BY-SA 4.0** data usage policy.
+1. Run predict.py.
+2. Verify CSV format: ID,Target.
+3. Upload Submission/predictions.csv to Zindi.
+
+Competition limits:
+
+* Limited daily submissions
+* Public leaderboard uses partial test data
+* Private leaderboard uses full hidden test data
 
 ---
 
-## 🙌 Acknowledgements
+## Suggestions for Improvement
+
+* Advanced feature engineering
+* Ensemble stacking
+* Probability calibration
+* Threshold tuning
+* Detailed confusion matrix analysis
+* Cross-validation averaging
+
+---
+
+## License
+
+This repository follows the competition data usage policy.
+
+---
+
+## Acknowledgements
 
 * data.org
 * FinMark Trust
@@ -276,6 +235,6 @@ This project follows the competition's **CC-BY-SA 4.0** data usage policy.
 
 ---
 
-## 📬 Contact
+## Contact
 
-For questions, open an issue in the repository.
+For questions or collaboration, open an issue on the GitHub repository.
